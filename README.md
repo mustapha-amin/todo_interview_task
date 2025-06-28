@@ -82,3 +82,9 @@ lib/
 ├── widgets/         # Reusable UI components
 └── main.dart        # App entry point
 ```
+
+## Screen recording
+
+https://github.com/user-attachments/assets/26f432d1-f4af-4fed-997f-79a81eef5289
+
+
