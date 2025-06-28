@@ -55,7 +55,6 @@ class TodoTile extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                // Enhanced Checkbox
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -88,7 +87,6 @@ class TodoTile extends ConsumerWidget {
 
                 const SizedBox(width: 16),
 
-                // Content
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,18 +114,23 @@ class TodoTile extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(
                           todo.note!,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: todo.completed == true
-                                ? (isDark ? Colors.grey[600] : Colors.grey[500])
-                                : (isDark
-                                      ? Colors.grey[400]
-                                      : Colors.grey[600]),
-                            fontWeight: FontWeight.w500,
-                            decoration: todo.completed == true
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                          ),
+                          style:
+                              kTextStyle(
+                                14,
+                                ref,
+                                color: todo.completed == true
+                                    ? (isDark
+                                          ? Colors.grey[600]
+                                          : Colors.grey[500])
+                                    : (isDark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600]),
+                                fontWeight: FontWeight.w500,
+                              ).copyWith(
+                                decoration: todo.completed == true
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
+                              ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -150,8 +153,9 @@ class TodoTile extends ConsumerWidget {
                             const SizedBox(width: 4),
                             Text(
                               DateFormat('MMM dd, yyyy').format(todo.dueDate!),
-                              style: TextStyle(
-                                fontSize: 12,
+                              style: kTextStyle(
+                                12,
+                                ref,
                                 color: todo.completed == true
                                     ? (isDark
                                           ? Colors.grey[600]
@@ -169,7 +173,6 @@ class TodoTile extends ConsumerWidget {
                   ),
                 ),
 
-                // Action Buttons
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -225,8 +228,9 @@ class TodoTile extends ConsumerWidget {
                               ),
                               content: Text(
                                 'Are you sure you want to delete "${todo.title}"?',
-                                style: TextStyle(
-                                  fontSize: 16,
+                                style: kTextStyle(
+                                  16,
+                                  ref,
                                   color: isDark
                                       ? Colors.grey[300]
                                       : Colors.grey[700],
@@ -238,7 +242,9 @@ class TodoTile extends ConsumerWidget {
                                       Navigator.pop(context, false),
                                   child: Text(
                                     'Cancel',
-                                    style: TextStyle(
+                                    style: kTextStyle(
+                                      14,
+                                      ref,
                                       color: isDark
                                           ? Colors.grey[400]
                                           : Colors.grey[600],
@@ -254,9 +260,11 @@ class TodoTile extends ConsumerWidget {
                                   child: TextButton(
                                     onPressed: () =>
                                         Navigator.pop(context, true),
-                                    child: const Text(
+                                    child: Text(
                                       'Delete',
-                                      style: TextStyle(
+                                      style: kTextStyle(
+                                        14,
+                                        ref,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600,
                                       ),

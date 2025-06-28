@@ -215,8 +215,9 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                 ),
                                 child: TextFormField(
                                   controller: _titleController,
-                                  style: TextStyle(
-                                    fontSize: 16,
+                                  style: kTextStyle(
+                                    16,
+                                    ref,
                                     color: isDark
                                         ? Colors.white
                                         : Colors.black87,
@@ -224,7 +225,9 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                   ),
                                   decoration: InputDecoration(
                                     labelText: 'Task Title',
-                                    labelStyle: TextStyle(
+                                    labelStyle: kTextStyle(
+                                      14,
+                                      ref,
                                       color: isDark
                                           ? Colors.grey[400]
                                           : Colors.grey[600],
@@ -274,8 +277,9 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                 ),
                                 child: TextFormField(
                                   controller: _noteController,
-                                  style: TextStyle(
-                                    fontSize: 16,
+                                  style: kTextStyle(
+                                    16,
+                                    ref,
                                     color: isDark
                                         ? Colors.white
                                         : Colors.black87,
@@ -283,7 +287,9 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                   ),
                                   decoration: InputDecoration(
                                     labelText: 'Note',
-                                    labelStyle: TextStyle(
+                                    labelStyle: kTextStyle(
+                                      14,
+                                      ref,
                                       color: isDark
                                           ? Colors.grey[400]
                                           : Colors.grey[600],
@@ -329,7 +335,9 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                 child: TextFormField(
                                   decoration: InputDecoration(
                                     labelText: 'Due Date',
-                                    labelStyle: TextStyle(
+                                    labelStyle: kTextStyle(
+                                      14,
+                                      ref,
                                       color: isDark
                                           ? Colors.grey[400]
                                           : Colors.grey[600],
@@ -367,8 +375,9 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                   ),
                                   readOnly: true,
                                   controller: _dateController,
-                                  style: TextStyle(
-                                    fontSize: 16,
+                                  style: kTextStyle(
+                                    16,
+                                    ref,
                                     color: isDark
                                         ? Colors.white
                                         : Colors.black87,

@@ -11,6 +11,7 @@ TextStyle kTextStyle(
   return TextStyle(
     fontSize: fontSize,
     color: color ??= ref.watch(themeProvider) ? Colors.white : Colors.black,
-    fontWeight: FontWeight.bold,
+    fontWeight: fontWeight ?? FontWeight.bold,
+    fontFamily: 'Geist'
   );
 }

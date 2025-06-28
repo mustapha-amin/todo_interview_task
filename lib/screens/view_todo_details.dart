@@ -84,7 +84,6 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
         child: SafeArea(
           child: Column(
             children: [
-              // Enhanced App Bar
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -127,7 +126,6 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                     ),
                     Row(
                       children: [
-                        // Toggle Complete Button
                         Container(
                           decoration: BoxDecoration(
                             color: widget.todo.completed!
@@ -155,7 +153,7 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                         ? Colors.grey[400]
                                         : Colors.grey[600]),
                             ),
-            onPressed: () {
+                            onPressed: () {
                               ref
                                   .read(todoNotifierProvider.notifier)
                                   .toggleComplete(widget.todo);
@@ -164,7 +162,6 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                           ),
                         ),
                         const SizedBox(width: 8),
-                        // Edit Button
                         Container(
                           decoration: BoxDecoration(
                             color: isDark
@@ -186,13 +183,12 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                   ? Colors.grey[300]
                                   : Colors.grey[700],
                             ),
-            onPressed: () {
+                            onPressed: () {
                               context.goTo(AddEditTodo(todo: widget.todo));
                             },
                           ),
                         ),
                         const SizedBox(width: 8),
-                        // Delete Button
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.red.withOpacity(0.1),
@@ -227,8 +223,9 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                   ),
                                   content: Text(
                                     'Are you sure you want to delete "${widget.todo.title}"?',
-                                    style: TextStyle(
-                                      fontSize: 16,
+                                    style: kTextStyle(
+                                      16,
+                                      ref,
                                       color: isDark
                                           ? Colors.grey[300]
                                           : Colors.grey[700],
@@ -240,7 +237,9 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                           Navigator.pop(context, false),
                                       child: Text(
                                         'Cancel',
-                                        style: TextStyle(
+                                        style: kTextStyle(
+                                          14,
+                                          ref,
                                           color: isDark
                                               ? Colors.grey[400]
                                               : Colors.grey[600],
@@ -256,9 +255,11 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                       child: TextButton(
                                         onPressed: () =>
                                             Navigator.pop(context, true),
-                                        child: const Text(
+                                        child: Text(
                                           'Delete',
-                                          style: TextStyle(
+                                          style: kTextStyle(
+                                            14,
+                                            ref,
                                             color: Colors.white,
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -284,7 +285,6 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                 ),
               ),
 
-              // Content
               Expanded(
                 child: FadeTransition(
                   opacity: _fadeAnimation,
@@ -295,7 +295,6 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Status Badge
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
@@ -330,8 +329,9 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                   widget.todo.completed!
                                       ? 'Completed'
                                       : 'Pending',
-                                  style: TextStyle(
-                                    fontSize: 14,
+                                  style: kTextStyle(
+                                    14,
+                                    ref,
                                     fontWeight: FontWeight.w600,
                                     color: widget.todo.completed!
                                         ? Colors.green
@@ -344,7 +344,6 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
 
                           const SizedBox(height: 24),
 
-                          // Title Section
                           Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(20),
@@ -358,12 +357,12 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                   color: Colors.black.withOpacity(0.1),
                                   blurRadius: 12,
                                   offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Row(
                                   children: [
                                     Icon(
@@ -375,8 +374,9 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                     Expanded(
                                       child: Text(
                                         'Task Title',
-                                        style: TextStyle(
-                                          fontSize: 14,
+                                        style: kTextStyle(
+                                          14,
+                                          ref,
                                           fontWeight: FontWeight.w600,
                                           color: isDark
                                               ? Colors.grey[400]
@@ -387,8 +387,8 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                   ],
                                 ),
                                 const SizedBox(height: 12),
-            Text(
-              widget.todo.title ?? 'No title',
+                                Text(
+                                  widget.todo.title ?? 'No title',
                                   style:
                                       kTextStyle(
                                         20,
@@ -402,19 +402,18 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                                   ? Colors.white
                                                   : Colors.black87),
                                       ).copyWith(
-                decoration: widget.todo.completed!
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
+                                        decoration: widget.todo.completed!
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none,
                                         decorationThickness: 2,
                                       ),
                                 ),
                               ],
-              ),
-            ),
+                            ),
+                          ),
 
-            const SizedBox(height: 16),
+                          const SizedBox(height: 16),
 
-                          // Description Section
                           if (widget.todo.note != null &&
                               widget.todo.note!.isNotEmpty) ...[
                             Container(
@@ -446,8 +445,9 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                       const SizedBox(width: 12),
                                       Text(
                                         'Description',
-                                        style: TextStyle(
-                                          fontSize: 14,
+                                        style: kTextStyle(
+                                          14,
+                                          ref,
                                           fontWeight: FontWeight.w600,
                                           color: isDark
                                               ? Colors.grey[400]
@@ -457,31 +457,33 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                     ],
                                   ),
                                   const SizedBox(height: 12),
-              Text(
-                widget.todo.note!,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: widget.todo.completed!
-                                          ? (isDark
-                                                ? Colors.grey[600]
-                                                : Colors.grey[500])
-                                          : (isDark
-                                                ? Colors.grey[300]
-                                                : Colors.grey[700]),
-                                      fontWeight: FontWeight.w500,
-                                      decoration: widget.todo.completed!
-                                          ? TextDecoration.lineThrough
-                                          : TextDecoration.none,
-                                      height: 1.5,
-                                    ),
+                                  Text(
+                                    widget.todo.note!,
+                                    style:
+                                        kTextStyle(
+                                          16,
+                                          ref,
+                                          color: widget.todo.completed!
+                                              ? (isDark
+                                                    ? Colors.grey[600]
+                                                    : Colors.grey[500])
+                                              : (isDark
+                                                    ? Colors.grey[300]
+                                                    : Colors.grey[700]),
+                                          fontWeight: FontWeight.w500,
+                                        ).copyWith(
+                                          decoration: widget.todo.completed!
+                                              ? TextDecoration.lineThrough
+                                              : TextDecoration.none,
+                                          height: 1.5,
+                                        ),
                                   ),
                                 ],
                               ),
-              ),
-            const SizedBox(height: 16),
+                            ),
+                            const SizedBox(height: 16),
                           ],
 
-                          // Due Date Section
                           if (widget.todo.dueDate != null) ...[
                             Container(
                               width: double.infinity,
@@ -512,8 +514,9 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                       const SizedBox(width: 12),
                                       Text(
                                         'Due Date',
-                                        style: TextStyle(
-                                          fontSize: 14,
+                                        style: kTextStyle(
+                                          14,
+                                          ref,
                                           fontWeight: FontWeight.w600,
                                           color: isDark
                                               ? Colors.grey[400]
@@ -523,12 +526,13 @@ class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
                                     ],
                                   ),
                                   const SizedBox(height: 12),
-              Text(
+                                  Text(
                                     DateFormat(
                                       'EEEE, MMMM dd, yyyy',
                                     ).format(widget.todo.dueDate!),
-                                    style: TextStyle(
-                                      fontSize: 16,
+                                    style: kTextStyle(
+                                      16,
+                                      ref,
                                       color: widget.todo.completed!
                                           ? (isDark
                                                 ? Colors.grey[600]

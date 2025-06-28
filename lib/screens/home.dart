@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -94,8 +92,9 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
             ),
             Text(
               'Organize your day',
-              style: TextStyle(
-                fontSize: 14,
+              style: kTextStyle(
+                14,
+                ref,
                 color: _isDark ? Colors.grey[400] : Colors.grey[600],
                 fontWeight: FontWeight.w500,
               ),
@@ -174,9 +173,10 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                         value: 'all',
                         label: Text(
                           'All (${ref.watch(todoNotifierProvider).length})',
-                          style: TextStyle(
+                          style: kTextStyle(
+                            14,
+                            ref,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -184,9 +184,10 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                         value: 'active',
                         label: Text(
                           'Active (${ref.watch(todoNotifierProvider).where((todo) => !todo.completed!).length})',
-                          style: TextStyle(
+                          style: kTextStyle(
+                            14,
+                            ref,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -194,9 +195,10 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                         value: 'completed',
                         label: Text(
                           'Completed (${ref.watch(todoNotifierProvider).where((todo) => todo.completed!).length})',
-                          style: TextStyle(
+                          style: kTextStyle(
+                            14,
+                            ref,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -232,7 +234,6 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
               child: Consumer(
                 builder: (context, ref, _) {
                   final todos = ref.watch(todoNotifierProvider);
-                  log(todos.toString());
                   final filteredTodos = _filter == 'all'
                       ? todos
                       : _filter == 'active'
@@ -291,8 +292,9 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                                     _ =>
                                       "Mark some tasks as complete to see them here",
                                   },
-                                  style: TextStyle(
-                                    fontSize: 16,
+                                  style: kTextStyle(
+                                    16,
+                                    ref,
                                     color: _isDark
                                         ? Colors.grey[400]
                                         : Colors.grey[600],
