@@ -22,102 +22,270 @@ class TodoTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Card(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        tileColor: todo.completed == true
-            ? isDark
-                  ? Colors.grey[800]
-                  : Colors.grey[300]
-            : Theme.of(context).cardColor,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-        leading: Checkbox(
-          value: todo.completed ?? false,
-          onChanged: (bool? value) {
-            if (value != null) {
-              ref.read(todoNotifierProvider.notifier).toggleComplete(todo);
-            }
-          },
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          activeColor: Theme.of(context).primaryColor,
-          checkColor: Colors.white,
+    return Container(
+      decoration: BoxDecoration(
+        color: todo.completed == true
+            ? (isDark
+                  ? Colors.grey[800]?.withValues(alpha: 0.6)
+                  : Colors.grey[200]?.withValues(alpha: 0.8))
+            : (isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : Colors.white.withValues(alpha: 0.9)),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(
+          color: todo.completed == true
+              ? (isDark ? Colors.grey[700]! : Colors.grey[300]!)
+              : Colors.transparent,
+          width: 1,
         ),
-        title: Text(
-          todo.title ?? '',
-          style:
-              kTextStyle(
-                16,
-                ref,
-                fontWeight: FontWeight.bold,
-                color: isDark ? Colors.grey[600] : Colors.black,
-              ).copyWith(
-                decoration: todo.completed == true
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
-              ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (todo.note != null)
-              Text(
-                todo.note!,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  decoration: todo.completed == true
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                ),
-              ),
-          ],
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                context.goTo(AddEditTodo(todo: todo));
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
-              onPressed: () async {
-                final shouldDelete = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Delete Todo'),
-                    content: Text(
-                      'Are you sure you want to delete "${todo.title}"?',
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                // Enhanced Checkbox
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: todo.completed == true
+                        ? Theme.of(context).primaryColor
+                        : Colors.transparent,
+                    border: Border.all(
+                      color: todo.completed == true
+                          ? Theme.of(context).primaryColor
+                          : (isDark ? Colors.grey[600]! : Colors.grey[400]!),
+                      width: 2,
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Cancel'),
+                  ),
+                  child: Checkbox(
+                    value: todo.completed ?? false,
+                    onChanged: (bool? value) {
+                      if (value != null) {
+                        ref
+                            .read(todoNotifierProvider.notifier)
+                            .toggleComplete(todo);
+                      }
+                    },
+                    shape: const CircleBorder(),
+                    activeColor: Colors.transparent,
+                    checkColor: Colors.white,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+
+                const SizedBox(width: 16),
+
+                // Content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        todo.title ?? '',
+                        style:
+                            kTextStyle(
+                              16,
+                              ref,
+                              fontWeight: FontWeight.w600,
+                              color: todo.completed == true
+                                  ? (isDark
+                                        ? Colors.grey[500]
+                                        : Colors.grey[600])
+                                  : (isDark ? Colors.white : Colors.black87),
+                            ).copyWith(
+                              decoration: todo.completed == true
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              decorationThickness: 2,
+                            ),
                       ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: Text(
-                          'Delete',
+                      if (todo.note != null && todo.note!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          todo.note!,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
+                            fontSize: 14,
+                            color: todo.completed == true
+                                ? (isDark ? Colors.grey[600] : Colors.grey[500])
+                                : (isDark
+                                      ? Colors.grey[400]
+                                      : Colors.grey[600]),
+                            fontWeight: FontWeight.w500,
+                            decoration: todo.completed == true
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
+                      ],
+                      if (todo.dueDate != null) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.calendar_today,
+                              size: 14,
+                              color: todo.completed == true
+                                  ? (isDark
+                                        ? Colors.grey[600]
+                                        : Colors.grey[500])
+                                  : (isDark
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600]),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              DateFormat('MMM dd, yyyy').format(todo.dueDate!),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: todo.completed == true
+                                    ? (isDark
+                                          ? Colors.grey[600]
+                                          : Colors.grey[500])
+                                    : (isDark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600]),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
-                );
+                ),
 
-                if (shouldDelete ?? false) {
-                  ref.read(todoNotifierProvider.notifier).deleteTodo(todo);
-                }
-              },
+                // Action Buttons
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.1)
+                            : Colors.grey[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.edit_outlined,
+                          size: 20,
+                          color: isDark ? Colors.grey[300] : Colors.grey[700],
+                        ),
+                        onPressed: () {
+                          context.goTo(AddEditTodo(todo: todo));
+                        },
+                        constraints: const BoxConstraints(
+                          minWidth: 36,
+                          minHeight: 36,
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.red.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.delete_outline,
+                          size: 20,
+                          color: Colors.red[400],
+                        ),
+                        onPressed: () async {
+                          final shouldDelete = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              title: Text(
+                                'Delete Task',
+                                style: kTextStyle(
+                                  18,
+                                  ref,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              content: Text(
+                                'Are you sure you want to delete "${todo.title}"?',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: isDark
+                                      ? Colors.grey[300]
+                                      : Colors.grey[700],
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                  child: Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      color: isDark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600],
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, true),
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+
+                          if (shouldDelete ?? false) {
+                            ref
+                                .read(todoNotifierProvider.notifier)
+                                .deleteTodo(todo);
+                          }
+                        },
+                        constraints: const BoxConstraints(
+                          minWidth: 36,
+                          minHeight: 36,
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-        onTap: onTap,
       ),
     );
   }

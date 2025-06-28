@@ -13,10 +13,12 @@ final themeBoxProvider = Provider<Box<bool>>((ref) {
   return Hive.box<bool>('theme');
 });
 
-final todoDBProvider = Provider((ref) {
+final todoDBProvider = Provider<TodoDB>((ref) {
   return TodoDB(todosBox: ref.read(todoBoxProvider));
 });
 
-final todoNotifierProvider = StateNotifierProvider<TodoNotifier, ListTodo>((ref) {
+final todoNotifierProvider = StateNotifierProvider<TodoNotifier, ListTodo>((
+  ref,
+) {
   return TodoNotifier(todoDB: ref.read(todoDBProvider));
 });

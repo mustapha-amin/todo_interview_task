@@ -9,27 +9,28 @@ class TodoNotifier extends StateNotifier<List<Todo>> {
     fetchTodos();
   }
 
-  void fetchTodos() {
-    state = todoDB.fetchTodos()!;
+  Future<void> fetchTodos() async {
+    final todos = todoDB.fetchTodos();
+    state = todos;
   }
 
   FutureVoid addTodo({Todo? todo}) async {
     await todoDB.addTodo(todo: todo);
-    fetchTodos();
+    await fetchTodos();
   }
 
   FutureVoid editTodo(int? key, Todo? todo) async {
     await todoDB.editTodo(key, todo);
-    fetchTodos();
+    await fetchTodos();
   }
 
   FutureVoid deleteTodo(Todo? todo) async {
     await todoDB.deleteTodo(todo);
-    fetchTodos();
+    await fetchTodos();
   }
 
   FutureVoid toggleComplete(Todo todo) async {
     await todoDB.toggleComplete(todo);
-    fetchTodos();
+    await fetchTodos();
   }
 }

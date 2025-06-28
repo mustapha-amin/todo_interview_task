@@ -19,9 +19,10 @@ class TodoDB {
     await todo!.delete();
   }
 
-  ListTodo? fetchTodos() {
-    return todosBox.values.toList()
-      ..sort((a, b) => b.dueDate!.compareTo(a.dueDate!));
+  ListTodo fetchTodos() {
+    final todos = todosBox.values.toList();
+    todos.sort((a, b) => b.dueDate!.compareTo(a.dueDate!));
+    return todos;
   }
 
   FutureVoid toggleComplete(Todo todo) async {

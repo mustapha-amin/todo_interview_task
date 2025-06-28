@@ -1,76 +1,556 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:pocket_tasks/common/extensions.dart';
+import 'package:pocket_tasks/common/k_textstyle.dart';
 import 'package:pocket_tasks/models/todo.dart';
 import 'package:pocket_tasks/notifiers/todo_state_notifier.dart';
 import 'package:pocket_tasks/providers/providers.dart';
+import 'package:pocket_tasks/providers/theme_provider.dart';
+import 'package:pocket_tasks/screens/add_edit_todo.dart';
 
 class ViewTodoDetails extends ConsumerStatefulWidget {
   final Todo todo;
   const ViewTodoDetails({super.key, required this.todo});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ViewTodoDetailsState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ViewTodoDetailsState();
 }
 
-class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails> {
+class _ViewTodoDetailsState extends ConsumerState<ViewTodoDetails>
+    with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _slideController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut),
+    );
+
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
+
+    _fadeController.forward();
+    _slideController.forward();
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    _slideController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = ref.read(themeProvider);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Todo Details'),
-        actions: [
-          IconButton(
-            icon: Icon(widget.todo.completed! ? Icons.check_box : Icons.check_box_outline_blank),
-            onPressed: () {
-              ref.read(todoNotifierProvider.notifier).toggleComplete(widget.todo.key);
-              Navigator.pop(context);
-            },
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: isDark
+                ? [
+                    const Color(0xFF1a1a2e),
+                    const Color(0xFF16213e),
+                    const Color(0xFF0f3460),
+                  ]
+                : [
+                    const Color(0xFFf8f9ff),
+                    const Color(0xFFe8f4fd),
+                    const Color(0xFFd1ecf1),
+                  ],
           ),
-          IconButton(
-            icon: const Icon(Icons.edit),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Enhanced App Bar
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? Colors.white.withOpacity(0.1)
+                            : Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: isDark ? Colors.white : Colors.black87,
+                        ),
+                        onPressed: () => context.pop(),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        'Task Details',
+                        style: kTextStyle(
+                          24,
+                          ref,
+                          color: isDark ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        // Toggle Complete Button
+                        Container(
+                          decoration: BoxDecoration(
+                            color: widget.todo.completed!
+                                ? Colors.green.withOpacity(0.2)
+                                : (isDark
+                                      ? Colors.white.withOpacity(0.1)
+                                      : Colors.white.withOpacity(0.8)),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              widget.todo.completed!
+                                  ? Icons.check_circle
+                                  : Icons.radio_button_unchecked,
+                              color: widget.todo.completed!
+                                  ? Colors.green
+                                  : (isDark
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600]),
+                            ),
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                '/add-todo',
-                arguments: widget.todo,
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
+                              ref
+                                  .read(todoNotifierProvider.notifier)
+                                  .toggleComplete(widget.todo);
+                              context.pop();
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // Edit Button
+                        Container(
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? Colors.white.withOpacity(0.1)
+                                : Colors.white.withOpacity(0.8),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.edit_outlined,
+                              color: isDark
+                                  ? Colors.grey[300]
+                                  : Colors.grey[700],
+                            ),
             onPressed: () {
-              ref.read(todoNotifierProvider.notifier).deleteTodo(widget.todo);
-              Navigator.pop(context);
-            },
+                              context.goTo(AddEditTodo(todo: widget.todo));
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // Delete Button
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.delete_outline,
+                              color: Colors.red[400],
+                            ),
+                            onPressed: () async {
+                              final shouldDelete = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  title: Text(
+                                    'Delete Task',
+                                    style: kTextStyle(
+                                      18,
+                                      ref,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    'Are you sure you want to delete "${widget.todo.title}"?',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: isDark
+                                          ? Colors.grey[300]
+                                          : Colors.grey[700],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      child: Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                          color: isDark
+                                              ? Colors.grey[400]
+                                              : Colors.grey[600],
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, true),
+                                        child: const Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+
+                              if (shouldDelete ?? false) {
+                                ref
+                                    .read(todoNotifierProvider.notifier)
+                                    .deleteTodo(widget.todo);
+                                context.pop();
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // Content
+              Expanded(
+                child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: SlideTransition(
+                    position: _slideAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Status Badge
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: widget.todo.completed!
+                                  ? Colors.green.withOpacity(0.2)
+                                  : Colors.orange.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: widget.todo.completed!
+                                    ? Colors.green.withOpacity(0.3)
+                                    : Colors.orange.withOpacity(0.3),
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  widget.todo.completed!
+                                      ? Icons.check_circle
+                                      : Icons.schedule,
+                                  size: 16,
+                                  color: widget.todo.completed!
+                                      ? Colors.green
+                                      : Colors.orange,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  widget.todo.completed!
+                                      ? 'Completed'
+                                      : 'Pending',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: widget.todo.completed!
+                                        ? Colors.green
+                                        : Colors.orange,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // Title Section
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? Colors.white.withOpacity(0.1)
+                                  : Colors.white.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.task_alt,
+                                      color: Theme.of(context).primaryColor,
+                                      size: 24,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
+                                        'Task Title',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: isDark
+                                              ? Colors.grey[400]
+                                              : Colors.grey[600],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
             Text(
               widget.todo.title ?? 'No title',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                  style:
+                                      kTextStyle(
+                                        20,
+                                        ref,
+                                        fontWeight: FontWeight.bold,
+                                        color: widget.todo.completed!
+                                            ? (isDark
+                                                  ? Colors.grey[500]
+                                                  : Colors.grey[600])
+                                            : (isDark
+                                                  ? Colors.white
+                                                  : Colors.black87),
+                                      ).copyWith(
                 decoration: widget.todo.completed!
                     ? TextDecoration.lineThrough
                     : TextDecoration.none,
+                                        decorationThickness: 2,
+                                      ),
+                                ),
+                              ],
               ),
             ),
+
             const SizedBox(height: 16),
-            if (widget.todo.note != null && widget.todo.note!.isNotEmpty)
+
+                          // Description Section
+                          if (widget.todo.note != null &&
+                              widget.todo.note!.isNotEmpty) ...[
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? Colors.white.withOpacity(0.1)
+                                    : Colors.white.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.note,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 24,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Text(
+                                        'Description',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: isDark
+                                              ? Colors.grey[400]
+                                              : Colors.grey[600],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
               Text(
                 widget.todo.note!,
-                style: Theme.of(context).textTheme.bodyLarge,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: widget.todo.completed!
+                                          ? (isDark
+                                                ? Colors.grey[600]
+                                                : Colors.grey[500])
+                                          : (isDark
+                                                ? Colors.grey[300]
+                                                : Colors.grey[700]),
+                                      fontWeight: FontWeight.w500,
+                                      decoration: widget.todo.completed!
+                                          ? TextDecoration.lineThrough
+                                          : TextDecoration.none,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
               ),
             const SizedBox(height: 16),
-            if (widget.todo.dueDate != null)
+                          ],
+
+                          // Due Date Section
+                          if (widget.todo.dueDate != null) ...[
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? Colors.white.withOpacity(0.1)
+                                    : Colors.white.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_today,
+                                        color: Theme.of(context).primaryColor,
+                                        size: 24,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Text(
+                                        'Due Date',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: isDark
+                                              ? Colors.grey[400]
+                                              : Colors.grey[600],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
               Text(
-                'Due Date: ${widget.todo.dueDate!.toLocal()}'.split(' ')[0],
-                style: Theme.of(context).textTheme.bodyMedium,
+                                    DateFormat(
+                                      'EEEE, MMMM dd, yyyy',
+                                    ).format(widget.todo.dueDate!),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: widget.todo.completed!
+                                          ? (isDark
+                                                ? Colors.grey[600]
+                                                : Colors.grey[500])
+                                          : (isDark
+                                                ? Colors.grey[300]
+                                                : Colors.grey[700]),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
-          ],
+            ],
+          ),
         ),
       ),
     );
