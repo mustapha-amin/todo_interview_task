@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pocket_tasks/models/todo.dart';
@@ -11,7 +12,12 @@ void main() async {
   Hive.registerAdapter(TodoAdapter());
   await Hive.openBox<Todo>('todos');
   await Hive.openBox<bool>('theme');
-
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarContrastEnforced: false,
+    ),
+  );
   runApp(const ProviderScope(child: MyApp()));
 }
 

@@ -1,9 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:hive_flutter/hive_flutter.dart';
 
 part 'todo.g.dart';
 
 @HiveType(typeId: 0)
-class Todo extends HiveObject{
+class Todo extends HiveObject {
   @HiveField(0)
   String? title;
 
@@ -20,7 +21,7 @@ class Todo extends HiveObject{
 
   @override
   String toString() {
-    return 'Todo(title: $title, note: $note, dueDate: $dueDate, completed: $completed)';
+    return 'Todo(title: $title, note: $note, dueDate: $dueDate, completed: $completed, key: $key)';
   }
 
   Todo copyWith({
@@ -35,5 +36,24 @@ class Todo extends HiveObject{
       dueDate: dueDate ?? this.dueDate,
       completed: completed ?? this.completed,
     );
+  }
+
+  @override
+  bool operator ==(covariant Todo other) {
+    if (identical(this, other)) return true;
+  
+    return 
+      other.title == title &&
+      other.note == note &&
+      other.dueDate == dueDate &&
+      other.completed == completed;
+  }
+
+  @override
+  int get hashCode {
+    return title.hashCode ^
+      note.hashCode ^
+      dueDate.hashCode ^
+      completed.hashCode;
   }
 }

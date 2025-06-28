@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pocket_tasks/common/typedefs.dart';
 import 'package:pocket_tasks/models/todo.dart';
@@ -7,8 +9,8 @@ class TodoDB {
 
   TodoDB({required this.todosBox});
 
-  FutureVoid addTodo({Todo? todo}) async {
-    await todosBox.add(todo!);
+  Future<int> addTodo({Todo? todo}) async {
+   return await todosBox.add(todo!);
   }
 
   FutureVoid editTodo(int? key, Todo? todo) async {
@@ -25,7 +27,11 @@ class TodoDB {
     return todos;
   }
 
+  Todo fetchTodoAt(int key) {
+    return todosBox.values.firstWhere((todo) => todo.key == key);
+  }
+
   FutureVoid toggleComplete(Todo todo) async {
-    todosBox.put(todo.key, todo.copyWith(completed: !todo.completed!));
+   await todosBox.put(todo.key, todo.copyWith(completed: !todo.completed!));
   }
 }

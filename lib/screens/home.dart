@@ -176,6 +176,10 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                           style: kTextStyle(
                             14,
                             ref,
+                            color: switch (_filter == 'all') {
+                              true => Colors.white,
+                              false => _isDark ? Colors.white : Colors.black,
+                            },
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -187,6 +191,10 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                           style: kTextStyle(
                             14,
                             ref,
+                            color: switch (_filter == 'active') {
+                              true => Colors.white,
+                              false => _isDark ? Colors.white : Colors.black,
+                            },
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -198,6 +206,10 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                           style: kTextStyle(
                             14,
                             ref,
+                            color: switch (_filter == 'completed') {
+                              true => Colors.white,
+                              false => _isDark ? Colors.white : Colors.black,
+                            },
                             fontWeight: FontWeight.w600,
                           ),
                         ),
