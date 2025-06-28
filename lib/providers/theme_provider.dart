@@ -1,8 +1,7 @@
+import 'package:PocketTasks/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:pocket_tasks/common/typedefs.dart';
-import 'package:pocket_tasks/providers/providers.dart';
 
 class ThemeNotifier extends StateNotifier<bool> {
   Box<bool>? themeBox;

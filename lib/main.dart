@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:pocket_tasks/models/todo.dart';
-import 'package:pocket_tasks/providers/theme_provider.dart';
-import 'package:pocket_tasks/screens/home.dart';
+import 'package:PocketTasks/models/todo.dart';
+import 'package:PocketTasks/providers/theme_provider.dart';
+import 'package:PocketTasks/screens/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

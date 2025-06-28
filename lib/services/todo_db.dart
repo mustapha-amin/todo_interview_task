@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:pocket_tasks/common/typedefs.dart';
-import 'package:pocket_tasks/models/todo.dart';
+import 'package:PocketTasks/common/typedefs.dart';
+import 'package:PocketTasks/models/todo.dart';
 
 class TodoDB {
   Box<Todo> todosBox;

@@ -1,7 +1,7 @@
+import 'package:PocketTasks/common/typedefs.dart';
+import 'package:PocketTasks/models/todo.dart';
+import 'package:PocketTasks/services/todo_db.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pocket_tasks/common/typedefs.dart';
-import 'package:pocket_tasks/models/todo.dart';
-import 'package:pocket_tasks/services/todo_db.dart';
 
 class TodoNotifier extends StateNotifier<List<Todo>> {
   final TodoDB todoDB;

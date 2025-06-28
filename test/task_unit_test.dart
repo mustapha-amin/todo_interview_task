@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive_test/hive_test.dart';
-import 'package:pocket_tasks/models/todo.dart';
-import 'package:pocket_tasks/providers/theme_provider.dart';
-import 'package:pocket_tasks/services/todo_db.dart';
+import 'package:PocketTasks/models/todo.dart';
+import 'package:PocketTasks/providers/theme_provider.dart';
+import 'package:PocketTasks/services/todo_db.dart';
 
 void main() {
   late Box<Todo> todoBox;

@@ -1,12 +1,11 @@
+import 'package:PocketTasks/common/extensions.dart';
+import 'package:PocketTasks/common/k_textstyle.dart';
+import 'package:PocketTasks/models/todo.dart';
+import 'package:PocketTasks/providers/providers.dart';
+import 'package:PocketTasks/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:pocket_tasks/common/extensions.dart';
-import 'package:pocket_tasks/common/k_textstyle.dart';
-import 'package:pocket_tasks/models/todo.dart';
-import 'package:pocket_tasks/notifiers/todo_state_notifier.dart';
-import 'package:pocket_tasks/providers/providers.dart';
-import 'package:pocket_tasks/providers/theme_provider.dart';
 
 class AddEditTodo extends ConsumerStatefulWidget {
   final Todo? todo;
@@ -122,7 +121,46 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: isDark ? Color(0xFF1a1a2e) : Color(0xFFf8f9ff),
+          elevation: 0,
+          leadingWidth: 70,
+          leading: Container(
+            height: 65,
+            width: 65,
+            margin: const EdgeInsets.only(left: 16),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : Colors.white.withValues(alpha: 0.8),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: isDark ? Colors.white : Colors.black87,
+              ),
+              onPressed: () => context.pop(),
+            ),
+          ),
+          title: Text(
+            widget.todo != null ? 'Edit Task' : 'Add New Task',
+            style: kTextStyle(
+              24,
+              ref,
+              color: isDark ? Colors.white : Colors.black87,
+            ),
+          ),
+        ),
         body: Container(
+          margin: EdgeInsets.only(top: 8),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -143,49 +181,6 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
           child: SafeArea(
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.1)
-                              : Colors.white.withValues(alpha: 0.8),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: isDark ? Colors.white : Colors.black87,
-                          ),
-                          onPressed: () => context.pop(),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          widget.todo != null ? 'Edit Task' : 'Add New Task',
-                          style: kTextStyle(
-                            24,
-                            ref,
-                            color: isDark ? Colors.white : Colors.black87,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 Expanded(
                   child: FadeTransition(
                     opacity: _fadeAnimation,
@@ -224,8 +219,8 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                     fontWeight: FontWeight.w500,
                                   ),
                                   decoration: InputDecoration(
-                                    labelText: 'Task Title',
-                                    labelStyle: kTextStyle(
+                                    hintText: 'Task Title',
+                                    hintStyle: kTextStyle(
                                       14,
                                       ref,
                                       color: isDark
@@ -286,8 +281,8 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                     fontWeight: FontWeight.w500,
                                   ),
                                   decoration: InputDecoration(
-                                    labelText: 'Note',
-                                    labelStyle: kTextStyle(
+                                    hintText: 'Note',
+                                    hintStyle: kTextStyle(
                                       14,
                                       ref,
                                       color: isDark

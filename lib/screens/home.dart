@@ -1,13 +1,14 @@
+import 'package:PocketTasks/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:pocket_tasks/common/extensions.dart';
-import 'package:pocket_tasks/common/k_textStyle.dart';
-import 'package:pocket_tasks/providers/providers.dart';
-import 'package:pocket_tasks/providers/theme_provider.dart';
-import 'package:pocket_tasks/screens/add_edit_todo.dart';
-import 'package:pocket_tasks/screens/view_todo_details.dart';
-import 'package:pocket_tasks/widgets/todo_tile.dart';
+import 'package:PocketTasks/common/extensions.dart';
+import 'package:PocketTasks/common/k_textStyle.dart';
+import 'package:PocketTasks/providers/providers.dart';
+import 'package:PocketTasks/providers/theme_provider.dart';
+import 'package:PocketTasks/screens/add_edit_todo.dart';
+import 'package:PocketTasks/screens/view_todo_details.dart';
+import 'package:PocketTasks/widgets/todo_tile.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});

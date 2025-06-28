@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:pocket_tasks/common/extensions.dart';
-import 'package:pocket_tasks/common/k_textstyle.dart';
-import 'package:pocket_tasks/models/todo.dart';
-import 'package:pocket_tasks/notifiers/todo_state_notifier.dart';
-import 'package:pocket_tasks/providers/providers.dart';
-import 'package:pocket_tasks/providers/theme_provider.dart';
-import 'package:pocket_tasks/screens/add_edit_todo.dart';
+import 'package:PocketTasks/common/extensions.dart';
+import 'package:PocketTasks/common/k_textstyle.dart';
+import 'package:PocketTasks/models/todo.dart';
+import 'package:PocketTasks/notifiers/todo_state_notifier.dart';
+import 'package:PocketTasks/providers/providers.dart';
+import 'package:PocketTasks/providers/theme_provider.dart';
+import 'package:PocketTasks/screens/add_edit_todo.dart';
 
 class ViewTodoDetails extends ConsumerStatefulWidget {
   final Todo todo;
