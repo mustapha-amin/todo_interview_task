@@ -10,11 +10,11 @@ class TodoDB {
   TodoDB({required this.todosBox});
 
   Future<int> addTodo({Todo? todo}) async {
-   return await todosBox.add(todo!);
+    return await todosBox.add(todo!);
   }
 
   FutureVoid editTodo(int? key, Todo? todo) async {
-    await todosBox.putAt(key!, todo!);
+    await todosBox.put(key!, todo!);
   }
 
   FutureVoid deleteTodo(Todo? todo) async {
@@ -32,6 +32,6 @@ class TodoDB {
   }
 
   FutureVoid toggleComplete(Todo todo) async {
-   await todosBox.put(todo.key, todo.copyWith(completed: !todo.completed!));
+    await todosBox.put(todo.key, todo.copyWith(completed: !todo.completed!));
   }
 }

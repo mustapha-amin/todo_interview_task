@@ -110,38 +110,14 @@ class TodoTile extends ConsumerWidget {
                               decorationThickness: 2,
                             ),
                       ),
-                      if (todo.note != null && todo.note!.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          todo.note!,
-                          style:
-                              kTextStyle(
-                                14,
-                                ref,
-                                color: todo.completed == true
-                                    ? (isDark
-                                          ? Colors.grey[600]
-                                          : Colors.grey[500])
-                                    : (isDark
-                                          ? Colors.grey[400]
-                                          : Colors.grey[600]),
-                                fontWeight: FontWeight.w500,
-                              ).copyWith(
-                                decoration: todo.completed == true
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                              ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                      if (todo.dueDate != null) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.calendar_today,
-                              size: 14,
+
+                      const SizedBox(height: 4),
+                      Text(
+                        todo.note!,
+                        style:
+                            kTextStyle(
+                              14,
+                              ref,
                               color: todo.completed == true
                                   ? (isDark
                                         ? Colors.grey[600]
@@ -149,26 +125,46 @@ class TodoTile extends ConsumerWidget {
                                   : (isDark
                                         ? Colors.grey[400]
                                         : Colors.grey[600]),
+                              fontWeight: FontWeight.w500,
+                            ).copyWith(
+                              decoration: todo.completed == true
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              DateFormat('MMM dd, yyyy').format(todo.dueDate!),
-                              style: kTextStyle(
-                                12,
-                                ref,
-                                color: todo.completed == true
-                                    ? (isDark
-                                          ? Colors.grey[600]
-                                          : Colors.grey[500])
-                                    : (isDark
-                                          ? Colors.grey[400]
-                                          : Colors.grey[600]),
-                                fontWeight: FontWeight.w500,
-                              ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: 14,
+                            color: todo.completed == true
+                                ? (isDark ? Colors.grey[600] : Colors.grey[500])
+                                : (isDark
+                                      ? Colors.grey[400]
+                                      : Colors.grey[600]),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            DateFormat('MMM dd, yyyy').format(todo.dueDate!),
+                            style: kTextStyle(
+                              12,
+                              ref,
+                              color: todo.completed == true
+                                  ? (isDark
+                                        ? Colors.grey[600]
+                                        : Colors.grey[500])
+                                  : (isDark
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600]),
+                              fontWeight: FontWeight.w500,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

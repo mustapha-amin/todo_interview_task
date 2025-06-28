@@ -300,7 +300,7 @@ class _HomeState extends ConsumerState<Home> with TickerProviderStateMixin {
                                     'all' =>
                                       "Tap the button below to add your first task",
                                     "active" =>
-                                      "Complete some tasks to see them here",
+                                      "Create some tasks to see them here",
                                     _ =>
                                       "Mark some tasks as complete to see them here",
                                   },

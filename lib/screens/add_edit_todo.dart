@@ -103,7 +103,7 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
       dueDate: _dateController.text.isNotEmpty
           ? DateFormat('dd/MM/yyyy').parse(_dateController.text)
           : null,
-      completed: false,
+      completed: widget.todo!.completed,
     );
 
     if (widget.todo != null) {
