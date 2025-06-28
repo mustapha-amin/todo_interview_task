@@ -102,7 +102,7 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
       dueDate: _dateController.text.isNotEmpty
           ? DateFormat('dd/MM/yyyy').parse(_dateController.text)
           : null,
-      completed: widget.todo!.completed,
+      completed: widget.todo != null ? widget.todo!.completed : false,
     );
 
     if (widget.todo != null) {
@@ -122,6 +122,7 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: isDark ? Color(0xFF1a1a2e) : Color(0xFFf8f9ff),
           elevation: 0,
           leadingWidth: 70,
@@ -160,7 +161,7 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
           ),
         ),
         body: Container(
-          margin: EdgeInsets.only(top: 8),
+          padding: EdgeInsets.only(top: 8),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -209,6 +210,8 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                   ],
                                 ),
                                 child: TextFormField(
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   controller: _titleController,
                                   style: kTextStyle(
                                     16,
@@ -280,6 +283,8 @@ class _AddEditTodoState extends ConsumerState<AddEditTodo>
                                         : Colors.black87,
                                     fontWeight: FontWeight.w500,
                                   ),
+                                  textCapitalization:
+                                      TextCapitalization.sentences,
                                   decoration: InputDecoration(
                                     hintText: 'Note',
                                     hintStyle: kTextStyle(
